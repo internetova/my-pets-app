@@ -22,6 +22,26 @@
         --divider: #36343b;
       }
     }
+    /* Явная тема из приложения: страница открывается с параметром
+       ?theme=dark|light, скрипт ниже выставляет data-theme на <html>.
+       Селекторы с атрибутом специфичнее :root, поэтому побеждают
+       системную media query. Без параметра — системная тема. */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141218;
+      --text: #e6e0e9;
+      --muted: #cac4d0;
+      --accent: #d0bcff;
+      --divider: #36343b;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0 auto;
@@ -45,6 +65,14 @@
     .meta { color: var(--muted); font-size: 0.9em; margin-bottom: 24px; }
     hr { border: none; border-top: 1px solid var(--divider); margin: 24px 0; }
   </style>
+  <script>
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.dataset.theme = theme;
+      }
+    })();
+  </script>
 </head>
 <body>
   <h1>Политика конфиденциальности приложения «Мои питомцы»</h1>
