@@ -1,0 +1,82 @@
+name: 🐞 Сообщить об ошибке
+description: Что-то в приложении работает неправильно.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо, что помогаете сделать **My Pets** лучше! ✨
+
+        ℹ️ Эта форма нужна, чтобы улучшить работу приложения. Заполняйте её простыми словами. Постарайтесь описать проблему так, чтобы её можно было воспроизвести. Чем больше деталей вы укажете, тем быстрее мы сможем исправить ошибку.
+
+        ⚠️ **Не оставляйте здесь свои персональные данные** (имя, номер телефона, email, домашний адрес и т. п.). Эта страница публичная и видна всем.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Что произошло?
+      description: Опишите проблему своими словами.
+      placeholder: Например — я не могу загрузить фото питомца. По нажатию на кнопку «фото» ничего не происходит.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Что вы ожидали?
+      placeholder: Например — По нажатию на кнопку «фото» должно открыться окно выбора изображения или камера.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как повторить проблему
+      description: Перечислите шаги, которые приводят к проблеме, по одному в строке. Это самая важная часть — она помогает найти и исправить ошибку.
+      placeholder: |
+        1. Открываю приложение
+        2. Нажимаю «Мои питомцы»
+        3. Выбираю питомца из списка
+        4. Открываю профиль питомца
+        5. Нажимаю кнопку Редактировать в аппбаре
+        6. Нажимаю кнопку «Фото» чтобы загрузить фото питомца
+        7. Ничего не происходит и не показывает никаких ошибок.
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Скриншот или видео
+      description: Если можете, добавьте скриншот или запись экрана. Файл можно просто перетащить в это поле.
+    validations:
+      required: false
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Платформа
+      description: Каким устройством вы пользуетесь?
+      options:
+        - Android
+        - iOS
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: Версия приложения
+      description: "Её можно найти в приложении: таб «Настройки» → раздел «О приложении»."
+      placeholder: Например — 1.4.2
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Когда это началось? Менялось ли что-то перед этим?
+      description: Например — после обновления телефона, после установки новой версии приложения и т. п.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Подтверждение
+      options:
+        - label: Я удалил(а) свои персональные данные из этого обращения.
+          required: true

@@ -1,0 +1,82 @@
+name: 🐞 Report a bug
+description: Something in the app is not working correctly.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping us make **My Pets** better! ✨
+
+        ℹ️ This form helps us improve the app. Please fill it in in simple words. Try to describe the problem so that it can be reproduced. The more details you give, the faster we can fix the bug.
+
+        ⚠️ **Please do not share personal data here** (your name, phone number, email, home address, etc.). This page is public and visible to everyone.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the problem in your own words.
+      placeholder: For example — I can't upload a photo of my pet. Nothing happens when I tap the "Photo" button.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+      placeholder: For example — tapping the "Photo" button should open the image picker or the camera.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: List the steps that lead to the problem, one per line. This is the most important part — it helps us find and fix the bug.
+      placeholder: |
+        1. Open the app
+        2. Tap "My pets"
+        3. Select a pet from the list
+        4. Open the pet's profile
+        5. Tap the Edit button in the app bar
+        6. Tap the "Photo" button to upload a pet photo
+        7. Nothing happens and no error is shown
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshot or video
+      description: If you can, add a screenshot or a screen recording. You can drag the file right into this box.
+    validations:
+      required: false
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which device do you use?
+      options:
+        - Android
+        - iOS
+    validations:
+      required: true
+  - type: input
+    id: app-version
+    attributes:
+      label: App version
+      description: "You can find it in the app: Settings tab → About the app."
+      placeholder: For example — 1.4.2
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: When did it start? Did anything change before it?
+      description: For example — after a phone update, after installing a new app version, etc.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I removed any personal data from this report.
+          required: true

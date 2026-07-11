@@ -1,0 +1,49 @@
+name: ✨ Feature request
+description: Suggest a new feature or an improvement for the app.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping us make **My Pets** better! ✨
+
+        ℹ️ This form helps us improve the app. Please fill it in in simple words — you do **not** need to be a programmer.
+
+        ⚠️ **Please do not share personal data here** (your name, phone number, email, home address, etc.). This page is public and visible to everyone.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve? What is inconvenient today?
+      description: Tell us what you are trying to do and what gets in the way.
+      placeholder: For example — I want to get a reminder before my pet's vaccination date.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like the app to do?
+      placeholder: Describe your idea in your own words.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you have thought about
+      description: Optional. How do you handle this now, or what else could work?
+    validations:
+      required: false
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshot or example
+      description: Optional. A picture or an example from another app can help. You can drag the file right into this box.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I removed any personal data from this report.
+          required: true

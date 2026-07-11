@@ -1,0 +1,49 @@
+name: ✨ Запрос новой функции
+description: Предложите новую функцию или улучшение для приложения.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо, что помогаете сделать **My Pets** лучше! ✨
+
+        ℹ️ Эта форма нужна, чтобы улучшить работу приложения. Заполняйте её простыми словами — быть программистом **не** обязательно.
+
+        ⚠️ **Не оставляйте здесь свои персональные данные** (имя, номер телефона, email, домашний адрес и т. п.). Эта страница публичная и видна всем.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Какую задачу это решит? Что сейчас неудобно?
+      description: Расскажите, что вы хотите сделать и что этому мешает.
+      placeholder: Например — я хочу получать напоминание перед датой прививки питомца.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Что бы вы хотели, чтобы приложение умело?
+      placeholder: Опишите свою идею своими словами.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Альтернативы, о которых вы думали
+      description: Необязательно. Как вы справляетесь с этим сейчас или что ещё могло бы подойти?
+    validations:
+      required: false
+  - type: textarea
+    id: media
+    attributes:
+      label: Скриншот или пример
+      description: Необязательно. Картинка или пример из другого приложения могут помочь. Файл можно просто перетащить в это поле.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Подтверждение
+      options:
+        - label: Я удалил(а) свои персональные данные из этого обращения.
+          required: true

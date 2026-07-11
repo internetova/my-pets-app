@@ -1,0 +1,57 @@
+name: 🌐 Неверный перевод
+description: Слово или фраза в приложении переведены неправильно или звучат неестественно.
+title: "[Translation] "
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо, что помогаете сделать **My Pets** лучше! ✨
+
+        ℹ️ Эта форма нужна, чтобы улучшить работу приложения. Заполняйте её простыми словами.
+        Постарайтесь описать проблему так, чтобы её можно было воспроизвести. Чем больше деталей вы укажете, тем быстрее мы сможем исправить ошибку.
+
+        ⚠️ **Не оставляйте здесь свои персональные данные** (имя, номер телефона, email, домашний адрес и т. п.). Эта страница публичная и видна всем.
+  - type: input
+    id: language
+    attributes:
+      label: Язык интерфейса, где вы увидели ошибку
+      placeholder: Например — русский, английский
+    validations:
+      required: true
+  - type: textarea
+    id: location
+    attributes:
+      label: Где в приложении вы это увидели?
+      description: Назовите экран или раздел, чтобы мы могли найти текст.
+      placeholder: Например — экран «Добавить визит», кнопка «Сохранить».
+    validations:
+      required: true
+  - type: textarea
+    id: current-text
+    attributes:
+      label: Текущий текст (как сейчас)
+      placeholder: Скопируйте текст ровно так, как он написан в приложении.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested-text
+    attributes:
+      label: Как должно быть (ваш вариант)
+      placeholder: Напишите правильный или более естественный вариант.
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Скриншот
+      description: Скриншот очень помогает. Файл можно просто перетащить в это поле.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Подтверждение
+      options:
+        - label: Я удалил(а) свои персональные данные из этого обращения.
+          required: true
