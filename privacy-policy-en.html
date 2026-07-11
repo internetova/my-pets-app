@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Privacy Policy — My Pets</title>
   <style>
     :root {
@@ -25,7 +25,11 @@
     * { box-sizing: border-box; }
     body {
       margin: 0 auto;
-      padding: 24px 20px 48px;
+      /* The page opens in the app's WebView under the app bar (56px height)
+         and the status bar. Top padding = safe-area (status bar/notch) + app
+         bar height + a visual gap, so content is not hidden behind the app bar.
+         Fallback of 24px for platforms that don't report safe-area insets. */
+      padding: calc(env(safe-area-inset-top, 24px) + 56px + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
       max-width: 700px;
       background: var(--bg);
       color: var(--text);

@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Политика конфиденциальности — My Pets</title>
   <style>
     :root {
@@ -25,7 +25,11 @@
     * { box-sizing: border-box; }
     body {
       margin: 0 auto;
-      padding: 24px 20px 48px;
+      /* Страница открывается в WebView под аппбаром приложения (высота 56px)
+         и статусбаром. Верхний отступ = safe-area (статусбар/вырез) + высота
+         аппбара + визуальный зазор, чтобы контент не уезжал под аппбар.
+         Фолбэк 24px для платформ, где safe-area-inset не приходит. */
+      padding: calc(env(safe-area-inset-top, 24px) + 56px + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
       max-width: 700px;
       background: var(--bg);
       color: var(--text);
@@ -43,11 +47,11 @@
   </style>
 </head>
 <body>
-  <h1>Политика конфиденциальности приложения My Pets</h1>
+  <h1>Политика конфиденциальности приложения «Мои питомцы»</h1>
   <p class="meta">Редакция № 1 от 11 июля 2026 года</p>
 
   <h2>1. Общие положения</h2>
-  <p>Приложение My Pets (далее — «Приложение») — это дневник заботы о питомцах:
+  <p>Приложение «Мои питомцы» (далее — «Приложение») — это дневник заботы о питомцах:
     в нём можно вести профили животных, отмечать вес, визиты к ветеринару,
     назначения, приём лекарств и другие события.</p>
   <p>Разработчик Приложения — Татьяна Сугина
@@ -131,6 +135,6 @@
     репозитория Приложения</a>.</p>
 
   <hr>
-  <p class="meta">My Pets — дневник заботы о питомцах.</p>
+  <p class="meta">«Мои питомцы» — дневник заботы о питомцах.</p>
 </body>
 </html>
