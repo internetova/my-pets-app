@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: 🔒 Privacy Policy / Политика конфиденциальности
+  - name: 🔒 Privacy Policy (English)
     url: https://internetova.github.io/my-pets-app/privacy-policy-en.html
-    about: How the app handles your data / Как приложение обращается с вашими данными.
+    about: How the app handles your data.
+  - name: 🔒 Политика конфиденциальности (русский)
+    url: https://internetova.github.io/my-pets-app/privacy-policy-ru.html
+    about: Как приложение обращается с вашими данными.
