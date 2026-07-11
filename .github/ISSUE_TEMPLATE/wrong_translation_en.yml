@@ -1,0 +1,57 @@
+name: 🌐 Wrong translation
+description: A word or phrase in the app is translated incorrectly or sounds unnatural.
+title: "[Translation] "
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping us make **My Pets** better! ✨
+
+        ℹ️ This form helps us improve the app. Please fill it in in simple words.
+        Try to describe the problem clearly. The more details you give, the faster we can fix it.
+
+        ⚠️ **Please do not share personal data here** (your name, phone number, email, home address, etc.). This page is public and visible to everyone.
+  - type: input
+    id: language
+    attributes:
+      label: Interface language where you saw the mistake
+      placeholder: For example — Russian, English
+    validations:
+      required: true
+  - type: textarea
+    id: location
+    attributes:
+      label: Where in the app did you see it?
+      description: Name the screen or section so we can find the text.
+      placeholder: For example — the "Add a visit" screen, the Save button.
+    validations:
+      required: true
+  - type: textarea
+    id: current-text
+    attributes:
+      label: Current text (how it looks now)
+      placeholder: Copy the exact text you see in the app.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested-text
+    attributes:
+      label: How it should be (your suggestion)
+      placeholder: Write the correct or more natural wording.
+    validations:
+      required: true
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshot
+      description: A screenshot helps a lot. You can drag the file right into this box.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I removed any personal data from this report.
+          required: true
