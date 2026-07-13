@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How to report a bug — My Pets</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141218;
+        --text: #e6e0e9;
+        --muted: #cac4d0;
+        --accent: #d0bcff;
+        --divider: #36343b;
+      }
+    }
+    /* Explicit theme from the app: the page is opened with a ?theme=dark|light
+       query parameter, and the script below sets data-theme on <html>.
+       Attribute selectors are more specific than :root, so they win over the
+       system media query. Without the parameter — the system theme is used. */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141218;
+      --text: #e6e0e9;
+      --muted: #cac4d0;
+      --accent: #d0bcff;
+      --divider: #36343b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      /* The page opens in a WebView beneath the app's app bar (56px high) and
+         the status bar. Top padding = safe-area (status bar/notch) + app bar
+         height + a visual gap, so content does not slide under the app bar.
+         Fallback 24px for platforms that do not report safe-area-inset. */
+      padding: calc(env(safe-area-inset-top, 24px) + 56px + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
+      max-width: 700px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.6em; line-height: 1.3; margin: 0 0 4px; }
+    h2 { font-size: 1.2em; margin: 32px 0 8px; }
+    p, li { margin: 8px 0; }
+    ul { padding-left: 22px; }
+    a { color: var(--accent); }
+    .meta { color: var(--muted); font-size: 0.9em; margin-bottom: 24px; }
+    hr { border: none; border-top: 1px solid var(--divider); margin: 24px 0; }
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: 4px 0 4px 14px;
+      margin: 16px 0;
+      color: var(--muted);
+    }
+    /* Screenshots are separate files for the light and dark themes. CSS
+       variables cannot swap them, so each step includes two images, and the
+       right one is chosen with the same specificity mechanism as the theme:
+       by default (and under a light system theme) — light; under a dark system
+       theme — dark; an explicit ?theme= overrides the system setting. */
+    .shot {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin: 12px 0 4px;
+      border: 1px solid var(--divider);
+      border-radius: 8px;
+    }
+    .shot-dark { display: none; }
+    @media (prefers-color-scheme: dark) {
+      .shot-light { display: none; }
+      .shot-dark  { display: block; }
+    }
+    :root[data-theme="light"] .shot-light { display: block; }
+    :root[data-theme="light"] .shot-dark  { display: none; }
+    :root[data-theme="dark"]  .shot-light { display: none; }
+    :root[data-theme="dark"]  .shot-dark  { display: block; }
+  </style>
+  <script>
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.dataset.theme = theme;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <h1>How to report a bug</h1>
+  <p class="meta">A step-by-step guide for the My Pets app</p>
+
+  <p>If something in the My Pets app doesn't work the way it should, you can let
+    the developer know. You don't need to be a programmer for this — just
+    describe the problem in plain words. The clearer you explain what happened,
+    the faster the bug can be found and fixed.</p>
+
+  <p>Bug reports are collected on the <strong>Issues</strong> page on GitHub —
+    an open list where anyone can report a problem or suggest an improvement.</p>
+
+  <div class="note">
+    <p>ℹ️ To send a report you need a free
+      <a href="https://github.com/">GitHub</a> account and to be signed in. If
+      you don't have an account yet, you can create one in a couple of minutes —
+      the sign-up button is on the GitHub website.</p>
+  </div>
+
+  <div class="note">
+    <p>⚠️ Do not include personal data in your report (your name, phone number,
+      email, home address, etc.). The page is public and visible to everyone.</p>
+  </div>
+
+  <h2>Step 1. Open the list of issues</h2>
+  <p>Go to the
+    <a href="https://github.com/internetova/my-pets-app/issues">app's issues
+    page</a>.</p>
+  <p><strong>First, look through the list of open issues</strong> — someone may
+    have already reported your problem. If you find a similar issue, open it and
+    add your comment: this helps the developer see that the problem affects
+    several people. In that case there's no need to create a new report.</p>
+  <p>If there's nothing similar, click the green <strong>New issue</strong>
+    button in the top-right corner.</p>
+  <img class="shot shot-light" src="images/issues/img-1-light.png"
+       alt="The app's issues page: the list of issues and the green New issue button in the top-right corner">
+  <img class="shot shot-dark" src="images/issues/img-1-dark.png"
+       alt="The app's issues page: the list of issues and the green New issue button in the top-right corner">
+
+  <h2>Step 2. Choose "Report a bug"</h2>
+  <p>A window with issue types will open. Click
+    <strong>🐞 Report a bug</strong> — this option is for when something in the
+    app is not working correctly.</p>
+  <p>The same window has other options too: <strong>✨ Feature request</strong>
+    — if you'd like to suggest an improvement, and <strong>🌐 Wrong
+    translation</strong> — if you spotted a mistake or awkward wording in the
+    app's text. Pick the English options — their titles are written in English.</p>
+  <img class="shot shot-light" src="images/issues/img-2-light-en.png"
+       alt="The issue-type window with an arrow pointing to the “Report a bug” option">
+  <img class="shot shot-dark" src="images/issues/img-2-dark-en.png"
+       alt="The issue-type window with an arrow pointing to the “Report a bug” option">
+
+  <h2>Step 3. Fill in the form and submit</h2>
+  <p>A form will open. Fill it in using plain words:</p>
+  <ul>
+    <li><strong>Title</strong> — a short name for the problem. The
+      <code>[Bug]</code> part is already filled in; add the gist after it.</li>
+    <li><strong>What happened?</strong> — describe what went wrong.</li>
+    <li><strong>What did you expect to happen?</strong> — how it should have
+      worked, in your view.</li>
+    <li><strong>Steps to reproduce</strong> — step by step, what you did before
+      the error. This is the most important field: if the problem can be
+      reproduced, it will be fixed faster.</li>
+    <li>Optionally, you can attach a <strong>screenshot or video</strong> (the
+      "Add files" button), choose the <strong>platform</strong> (Android or iOS),
+      and specify the app version.</li>
+  </ul>
+  <p>At the end, tick the checkbox confirming that you didn't leave any personal
+    data in the report, and click the green <strong>Create</strong> button.</p>
+  <img class="shot shot-light" src="images/issues/img-3-light-en.png"
+       alt="The bug report form with its fields and an arrow pointing to the green Create button">
+  <img class="shot shot-dark" src="images/issues/img-3-dark-en.png"
+       alt="The bug report form with its fields and an arrow pointing to the green Create button">
+
+  <h2>What happens next</h2>
+  <p>That's it! Your report will appear in the shared list, and the developer
+    will see it. If any clarifications are needed, the reply will come right in
+    your issue — so check back on it from time to time. Thank you for helping
+    make the app better! ✨</p>
+
+  <hr>
+  <p class="meta">My Pets — a pet care diary.</p>
+</body>
+</html>

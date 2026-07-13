@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Как сообщить об ошибке — My Pets</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141218;
+        --text: #e6e0e9;
+        --muted: #cac4d0;
+        --accent: #d0bcff;
+        --divider: #36343b;
+      }
+    }
+    /* Явная тема из приложения: страница открывается с параметром
+       ?theme=dark|light, скрипт ниже выставляет data-theme на <html>.
+       Селекторы с атрибутом специфичнее :root, поэтому побеждают
+       системную media query. Без параметра — системная тема. */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141218;
+      --text: #e6e0e9;
+      --muted: #cac4d0;
+      --accent: #d0bcff;
+      --divider: #36343b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      /* Страница открывается в WebView под аппбаром приложения (высота 56px)
+         и статусбаром. Верхний отступ = safe-area (статусбар/вырез) + высота
+         аппбара + визуальный зазор, чтобы контент не уезжал под аппбар.
+         Фолбэк 24px для платформ, где safe-area-inset не приходит. */
+      padding: calc(env(safe-area-inset-top, 24px) + 56px + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
+      max-width: 700px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.6em; line-height: 1.3; margin: 0 0 4px; }
+    h2 { font-size: 1.2em; margin: 32px 0 8px; }
+    p, li { margin: 8px 0; }
+    ul { padding-left: 22px; }
+    a { color: var(--accent); }
+    .meta { color: var(--muted); font-size: 0.9em; margin-bottom: 24px; }
+    hr { border: none; border-top: 1px solid var(--divider); margin: 24px 0; }
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: 4px 0 4px 14px;
+      margin: 16px 0;
+      color: var(--muted);
+    }
+    /* Скриншоты — отдельные файлы для светлой и тёмной темы. CSS-переменные
+       их не переключают, поэтому для каждого шага вставлены две картинки, а
+       видимость нужной выбирается тем же механизмом специфичности, что и тема:
+       по умолчанию (и при системной светлой теме) — светлая; при системной
+       тёмной — тёмная; явный ?theme= перебивает системную настройку. */
+    .shot {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      margin: 12px 0 4px;
+      border: 1px solid var(--divider);
+      border-radius: 8px;
+    }
+    .shot-dark { display: none; }
+    @media (prefers-color-scheme: dark) {
+      .shot-light { display: none; }
+      .shot-dark  { display: block; }
+    }
+    :root[data-theme="light"] .shot-light { display: block; }
+    :root[data-theme="light"] .shot-dark  { display: none; }
+    :root[data-theme="dark"]  .shot-light { display: none; }
+    :root[data-theme="dark"]  .shot-dark  { display: block; }
+  </style>
+  <script>
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.dataset.theme = theme;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <h1>Как сообщить об ошибке</h1>
+  <p class="meta">Пошаговая инструкция для приложения «Мои питомцы»</p>
+
+  <p>Если в приложении «Мои питомцы» что-то работает не так, вы можете рассказать
+    об этом разработчику. Для этого не нужно быть программистом — достаточно
+    описать проблему простыми словами. Чем понятнее вы опишете, что случилось,
+    тем быстрее ошибку получится найти и исправить.</p>
+
+  <p>Сообщения об ошибках собираются на странице <strong>Issues</strong>
+    («обращения») в GitHub — это открытый список, где каждый может рассказать о
+    проблеме или предложить улучшение.</p>
+
+  <div class="note">
+    <p>ℹ️ Чтобы отправить обращение, нужен бесплатный аккаунт
+      <a href="https://github.com/">GitHub</a> и вход в него. Если аккаунта ещё
+      нет, его можно завести за пару минут — кнопка регистрации есть на сайте
+      GitHub.</p>
+  </div>
+
+  <div class="note">
+    <p>⚠️ Не указывайте в обращении личные данные (имя, номер телефона,
+      электронную почту, домашний адрес и т. п.). Страница открытая и видна
+      всем.</p>
+  </div>
+
+  <h2>Шаг 1. Открыть список обращений</h2>
+  <p>Перейдите на страницу
+    <a href="https://github.com/internetova/my-pets-app/issues">обращений
+    приложения</a>.</p>
+  <p><strong>Сначала посмотрите список уже открытых обращений</strong> —
+    возможно, о вашей проблеме уже написал кто-то другой. Если вы нашли похожее
+    обращение, откройте его и добавьте свой комментарий: так разработчику будет
+    проще понять, что проблема встречается у нескольких человек. Создавать новое
+    обращение в этом случае не нужно.</p>
+  <p>Если ничего похожего нет — нажмите зелёную кнопку <strong>New issue</strong>
+    («новое обращение») в правом верхнем углу.</p>
+  <img class="shot shot-light" src="images/issues/img-1-light.png"
+       alt="Страница обращений приложения: список обращений и зелёная кнопка New issue в правом верхнем углу">
+  <img class="shot shot-dark" src="images/issues/img-1-dark.png"
+       alt="Страница обращений приложения: список обращений и зелёная кнопка New issue в правом верхнем углу">
+
+  <h2>Шаг 2. Выбрать «Сообщить об ошибке»</h2>
+  <p>Откроется окно с выбором типа обращения. Нажмите
+    <strong>🐞 Сообщить об ошибке</strong> — этот вариант подходит, когда
+    что-то в приложении работает неправильно.</p>
+  <p>В этом же окне есть и другие варианты: <strong>✨ Запрос новой функции</strong>
+    — если хотите предложить улучшение, и <strong>🌐 Неверный перевод</strong> —
+    если в приложении встретилась ошибка или неточность в тексте. Выбирайте
+    русские варианты — их названия написаны по-русски.</p>
+  <img class="shot shot-light" src="images/issues/img-2-light-ru.png"
+       alt="Окно выбора типа обращения со стрелкой на пункт «Сообщить об ошибке»">
+  <img class="shot shot-dark" src="images/issues/img-2-dark-ru.png"
+       alt="Окно выбора типа обращения со стрелкой на пункт «Сообщить об ошибке»">
+
+  <h2>Шаг 3. Заполнить форму и отправить</h2>
+  <p>Откроется форма. Заполните её простыми словами:</p>
+  <ul>
+    <li><strong>Заголовок</strong> — короткое название проблемы. Часть
+      <code>[Bug]</code> уже подставлена, допишите суть после неё.</li>
+    <li><strong>Что произошло?</strong> — опишите, что пошло не так.</li>
+    <li><strong>Что вы ожидали?</strong> — как, по-вашему, должно было быть.</li>
+    <li><strong>Как повторить</strong> — по шагам, что вы делали до ошибки. Это
+      самое важное поле: если проблему получится повторить, её быстрее исправят.</li>
+    <li>При желании можно приложить <strong>скриншот или видео</strong> (кнопка
+      «Add files»), выбрать <strong>платформу</strong> (Android или iOS) и
+      указать версию приложения.</li>
+  </ul>
+  <p>В конце поставьте галочку о том, что вы не оставили в обращении личных
+    данных, и нажмите зелёную кнопку <strong>Create</strong> («создать»).</p>
+  <img class="shot shot-light" src="images/issues/img-3-light-ru.png"
+       alt="Форма сообщения об ошибке с полями и стрелкой на зелёную кнопку Create">
+  <img class="shot shot-dark" src="images/issues/img-3-dark-ru.png"
+       alt="Форма сообщения об ошибке с полями и стрелкой на зелёную кнопку Create">
+
+  <h2>Что дальше</h2>
+  <p>Готово! Обращение появится в общем списке, и разработчик его увидит. Если
+    понадобятся уточнения, ответ придёт прямо в вашем обращении — время от
+    времени заглядывайте туда. Спасибо, что помогаете сделать приложение лучше! ✨</p>
+
+  <hr>
+  <p class="meta">«Мои питомцы» — дневник заботы о питомцах.</p>
+</body>
+</html>
