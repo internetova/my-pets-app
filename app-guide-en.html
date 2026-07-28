@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How to use the app — My Pets</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141218;
+        --text: #e6e0e9;
+        --muted: #cac4d0;
+        --accent: #d0bcff;
+        --divider: #36343b;
+      }
+    }
+    /* Явная тема из приложения: страница открывается с параметром
+       ?theme=dark|light, скрипт ниже выставляет data-theme на <html>.
+       Селекторы с атрибутом специфичнее :root, поэтому побеждают
+       системную media query. Без параметра — системная тема. */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141218;
+      --text: #e6e0e9;
+      --muted: #cac4d0;
+      --accent: #d0bcff;
+      --divider: #36343b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      /* Страница открывается в WebView под аппбаром приложения (высота 56px)
+         и статусбаром. Верхний отступ = safe-area (статусбар/вырез) + высота
+         аппбара + визуальный зазор, чтобы контент не уезжал под аппбар.
+         Фолбэк 24px для платформ, где safe-area-inset не приходит. */
+      padding: calc(env(safe-area-inset-top, 24px) + 56px + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
+      max-width: 700px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.6em; line-height: 1.3; margin: 0 0 4px; }
+    h2 { font-size: 1.2em; margin: 32px 0 8px; }
+    h3 { font-size: 1.05em; margin: 24px 0 4px; }
+    p, li { margin: 8px 0; }
+    ul { padding-left: 22px; }
+    a { color: var(--accent); }
+    .meta { color: var(--muted); font-size: 0.9em; margin-bottom: 24px; }
+    hr { border: none; border-top: 1px solid var(--divider); margin: 24px 0; }
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: 4px 0 4px 14px;
+      margin: 16px 0;
+      color: var(--muted);
+    }
+    .toc { margin: 24px 0 8px; }
+    .toc ul { margin: 4px 0; }
+  </style>
+  <script>
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.dataset.theme = theme;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <h1>How to use the My Pets app</h1>
+  <p class="meta">A guide to the app's features</p>
+
+  <p>My Pets is a handy diary for looking after your animals. The app helps owners
+    and animal volunteers keep track of their pets' health, care and important
+    events — and forget nothing.</p>
+
+  <nav class="toc">
+    <strong>Contents</strong>
+    <ul>
+      <li><a href="#about">About the app</a></li>
+      <li><a href="#start">Getting started</a></li>
+      <li><a href="#safety">Your data and action confirmations</a></li>
+      <li><a href="#pets">How many pets, and why categories are useful</a></li>
+      <li><a href="#tab-pets">The Pets screen</a></li>
+      <li><a href="#tab-search">The Search screen</a></li>
+      <li><a href="#tab-settings">The Settings screen</a></li>
+    </ul>
+  </nav>
+
+  <h2 id="about">About the app</h2>
+  <p>All data is stored on your phone only. You can always export your data and
+    move it to another phone or share it with a friend — they can add it using
+    the import function.</p>
+
+  <h2 id="start">Getting started</h2>
+  <p>To get started, first create a pet profile.</p>
+  <p>Filling in a profile may require some additional data — for example the pet's
+    owner or caregiver, or the pet's category. You can add it right while creating
+    the profile, or in advance in
+    <strong>Settings → Reference data</strong>.</p>
+
+  <h2 id="safety">Your data and action confirmations</h2>
+  <div class="note">
+    <p>⚠️ All data is stored on your phone only, so please be careful when deleting
+      records. Just in case, back up your data from time to time.</p>
+  </div>
+  <p>We've taken care to make sure you don't delete your data by accident.</p>
+  <p>Every sensitive action in the app requires your confirmation: deleting a
+    record, changing the status of a vaccination or a parasite treatment, leaving
+    an editing screen with unsaved changes. In such cases the app shows an extra
+    window where you need to confirm the action. This mechanism is meant for
+    deleting smaller amounts of data.</p>
+
+  <h3>Deleting a pet</h3>
+  <p>Deleting a pet works in a more elaborate way: together with the profile, every
+    record and every file linked to that pet is deleted in an instant. They cannot
+    be restored if you have no backup.</p>
+  <p>That is why deletion takes several steps:</p>
+  <ul>
+    <li>first the app shows a bottom panel asking whether you really want to delete
+      the pet, with a hint that the pet can be moved to the archive instead;</li>
+    <li>if you confirm, another panel appears where you have to enter a deletion
+      code. The data is deleted only after the correct code is entered.</li>
+  </ul>
+
+  <h2 id="pets">How many pets, and why categories are useful</h2>
+  <p>You can add as many pets as you like.</p>
+  <p>If you have several animals, you can carry out bulk actions. Use the bulk
+    actions button on the main <strong>Pets</strong> screen — it appears once more
+    than one pet has been added.</p>
+  <p>If you have a lot of animals, sort them into categories. Categories are set up
+    in the reference data and are used in filters across different parts of the
+    app.</p>
+  <p><strong>Why categories are useful</strong></p>
+  <p>Ordinary owners of one to three pets don't need categories. If you don't add
+    them in the settings, you won't see them in the app's interface either.</p>
+  <p>Categories are for people who look after the lives of many animals. As a rule
+    these are animal volunteers with a lot of animals in their care: they rescue
+    animals, find homes for them and follow up on how they get on.</p>
+  <p>Categories can also be useful for breeders, who need to group animals to get
+    quick access to the records of a particular group.</p>
+  <p>Once you create categories, a filter for them appears in several places in the
+    app:</p>
+  <ul>
+    <li>the main screen with the list of animals;</li>
+    <li>the screen for selecting animals for bulk operations;</li>
+    <li>the summary screens for weight, vaccinations, parasite treatments and
+      medications.</li>
+  </ul>
+
+  <h2 id="tab-pets">The Pets screen</h2>
+  <p>This is the main screen for working with your pets. Here you can:</p>
+  <ul>
+    <li>add new pets;</li>
+    <li>work with pet profiles;</li>
+    <li>carry out bulk actions on your pets;</li>
+    <li>see summary data if you have more than one pet;</li>
+    <li>see the current list of medications you need to give your pets.</li>
+  </ul>
+
+  <h3>Pet profile</h3>
+  <p>The profile holds all the data about a pet. You can always edit that data —
+    look for the buttons in the top bar of the screen, next to its title.</p>
+  <p>Editing mode gives you extra options:</p>
+  <ul>
+    <li>move the pet to the archive;</li>
+    <li>add a date of death.</li>
+  </ul>
+  <p>Once the profile is created, you can start adding:</p>
+  <ul>
+    <li>vaccination events;</li>
+    <li>parasite treatment events;</li>
+    <li>vet visits;</li>
+    <li>prescription lists from the vet;</li>
+    <li>a photo gallery for the pet profile;</li>
+    <li>photos for Vet visits and Other events records;</li>
+    <li>the pet's weight.</li>
+  </ul>
+  <p>There is a round <strong>+</strong> button on the profile screen — it's a
+    shortcut for quick actions on the pet. You can perform the same actions inside
+    the individual logs as well. Every action can be edited or deleted later.</p>
+
+  <h3>Notes</h3>
+  <p>We recommend writing down everything important in the notes, so you can find
+    the information you need quickly.</p>
+
+  <h3>Photo gallery</h3>
+  <p>Here you can add extra photos of your pet — up to 20 photos per record.</p>
+  <p>Photos are saved in the app's internal storage. Don't forget to set up how
+    photos are saved in
+    <strong>Settings → Database and files → File sizes</strong>.</p>
+  <p>From the photo gallery you can share a photo or save it from the app's storage
+    to your phone's own gallery.</p>
+
+  <h3>Vet visits</h3>
+  <p>Add vet appointments here, as well as your own observations about your pet's
+    health and the medications it takes.</p>
+  <p>The top bar of the visit log has a <strong>+</strong> button for adding a new
+    visit or an event related to your pet's health.</p>
+  <p>Once the record is saved, you can:</p>
+  <ul>
+    <li>add photos to it;</li>
+    <li>fill in a prescription list with medications.</li>
+  </ul>
+  <p>To do that, tap the visit card in the log — this takes you to the visit's
+    detail screen. There you'll find a button for creating a prescription list and
+    a button for adding photo documents to this visit. Photos work the same way as
+    described in the Photo gallery section above.</p>
+
+  <h3>Prescription list</h3>
+  <p>Tap <strong>Create prescription list</strong> on the vet visit's detail screen
+    — the <strong>Add prescriptions</strong> screen opens.</p>
+  <p>Choose a medication. The <strong>Instructions</strong> field is pre-filled with
+    the data from the "How to use" field of the medication you selected — you can
+    change it however you need.</p>
+  <p>Fill in the whole form. Once you've chosen a medication, an
+    <strong>Add another medication</strong> button appears below its form. Add as
+    many medications as you need and tap <strong>Save</strong>.</p>
+  <p>Entries in a prescription list can be edited and deleted, and new ones can be
+    added.</p>
+  <p>The current list of medications you need to give your pet can be seen in the
+    <strong>Medications</strong> section of the pet profile, and on the main screen
+    with the list of pets — in the top menu, the <strong>Medications</strong>
+    item.</p>
+
+  <h3>Vaccination log</h3>
+  <p>Holds the data on all of your pet's vaccinations, and also shows the status of
+    the latest vaccination and the number of days until the next booster.</p>
+  <p>The top bar of the log has a <strong>+</strong> button for adding a new
+    vaccination event.</p>
+  <p>Tap an event card to open the vaccination detail screen — it shows the details
+    along with the description of the vaccine and your notes.</p>
+  <p>If you no longer plan to track when the next booster is due, tap
+    <strong>Stop tracking</strong>. The vaccine is then marked as not requiring a
+    booster, and the due-date bar is hidden.</p>
+  <p>All vaccination records can be edited and deleted.</p>
+
+  <h3>Parasite treatments</h3>
+  <p>Holds the data on all of your pet's treatments, and also shows the status of
+    the latest treatment and the number of days until the next one.</p>
+  <p>The top bar of the log has a <strong>+</strong> button for adding a new
+    treatment event.</p>
+  <p>Tap an event card to open the treatment detail screen — it shows the details
+    along with the description of the product and your notes.</p>
+  <p>If you no longer plan to track when the next treatment is due, tap
+    <strong>Stop tracking</strong>. The treatment is then marked as not requiring
+    repetition, and the due-date bar is hidden. This is handy when, for example,
+    you put a flea and tick collar on your pet in spring and summer but not in
+    autumn and winter.</p>
+  <p>All treatment records can be edited and deleted.</p>
+
+  <h3>Other events</h3>
+  <p>You can add any event related to your pet to this log. Once the record is
+    saved, you can add up to 20 photos to it and also set your pet's mood for the
+    event — the mood is shown in the event log.</p>
+  <p>All event records can be edited and deleted.</p>
+
+  <h3>Weight log</h3>
+  <p>Add weigh-ins here. All weigh-in data is kept in this log, and the most recent
+    weight is shown in the pet profile.</p>
+  <p>All weigh-in records can be edited and deleted.</p>
+
+  <h3>Owner or caregiver</h3>
+  <p>This is an information block showing who is responsible for this pet.</p>
+  <p>You can change the responsible person in the pet's editing mode — the edit
+    button is in the top bar of the screen, on the right.</p>
+  <p>The owner's or caregiver's own details are edited in
+    <strong>Settings → Reference data → Owners</strong>.</p>
+
+  <h2 id="tab-search">The Search screen</h2>
+  <p>This screen lets you search across the whole app. To start searching, type at
+    least 3 characters in the search field and pick the categories to search in
+    the filter.</p>
+
+  <h2 id="tab-settings">The Settings screen</h2>
+
+  <h3>Reference data</h3>
+  <p>To use the app to the full, you'll need to fill in the reference data. You can
+    do it in advance, or add entries as you go while working with a pet profile.</p>
+  <p>When you first installed the app, we loaded some basic entries into the
+    reference data. You can delete the ones you don't need and add your own.</p>
+  <p><strong>Species and breeds</strong> — a standard list that needs no further
+    explanation.</p>
+  <p><strong>Pet categories</strong> — we described categories
+    <a href="#pets">above</a>. The order of categories in the filter is changed by
+    sorting: turn on sorting mode and drag the categories into the order you
+    want.</p>
+  <p><strong>Owners and caregivers</strong> — this holds the details of the people
+    responsible for particular animals. They can be permanent owners of pets or
+    temporary caregivers. In editing mode, an owner's or caregiver's record can be
+    moved to the archive.</p>
+  <p><strong>Medications</strong> — add the medications prescribed to you by vets
+    here, as well as the ones you use on your own: parasite treatment products or
+    vitamins, for example. The names of the medication categories cannot be deleted
+    or edited — they are built into the app and listed alphabetically in the
+    filter.</p>
+  <p><strong>Vaccine types</strong> — this data is used when adding a vaccination
+    event. Add the types of vaccination you usually give your pets. For our own
+    cats, for example, we do rabies, a combination vaccine and leukemia.</p>
+  <p><strong>Treatment types</strong> — this data is used when adding a parasite
+    treatment event. Add the types of treatment you usually give your pets. For our
+    own cats, for example, we use: flea and tick drops, a flea and tick collar, and
+    a dewormer.</p>
+  <div class="note">
+    <p>⚠️ When creating vaccine and treatment types, don't use one type for
+      different treatments.</p>
+    <p>For example, flea and tick treatments are done with different products on
+      different schedules: a collar and drops need to be repeated after different
+      intervals. That's why, in our own use, these treatments are split into
+      separate types (see the example just above). Merging them into a single
+      general "fleas and ticks" type would be wrong.</p>
+    <p>When you add a new vaccination or treatment event, the app takes the specific
+      type into account and marks only the previous event of the same type as
+      superseded.</p>
+  </div>
+  <p><strong>Vet clinics</strong> — add the clinics you visit with your pets here.
+    You can also add a clinic called "Me". You'll need this list when adding a
+    vet.</p>
+  <p><strong>Vets</strong> — add the vets you see here. You can also add a "vet"
+    called "Me". You'll need this list when creating a Vet visit record.</p>
+
+  <h3>Archive</h3>
+  <p>Use the archive instead of deleting. For example, if you've rehomed a pet,
+    don't delete the pet and its new owner from the database — move them to the
+    archive. That way you can follow how the pet is getting on and look up the data
+    whenever you need it again.</p>
+  <p>Archived records are hidden from the active lists and don't get in the way of
+    working with your other pets.</p>
+
+  <h3>App settings</h3>
+  <p>Here you can pick the theme that suits you best — there are several light and
+    several dark themes.</p>
+  <p>The interface language is changed here too. Changing the language changes only
+    the interface: all the records in the database stay in the language they were
+    originally added in.</p>
+
+  <h3>Database and files</h3>
+  <p><strong>Export data.</strong> Export lets you move your data to another phone,
+    share it with a friend, or simply keep a backup just in case.</p>
+  <p><strong>Import data.</strong> Import lets you restore the data from your
+    backup. If you haven't exported your data for a long time, make sure you have
+    the latest version of the app installed.</p>
+  <div class="note">
+    <p>ℹ️ The phone where you restore the data from a backup must have the same
+      version of the app as the phone where you made the backup (the export).</p>
+  </div>
+  <p><strong>File sizes.</strong> Here you can set the size and quality used when
+    photos are saved inside the app. The larger the size and the higher the
+    quality, the more space the app takes up on your phone.</p>
+
+  <h3>The App section</h3>
+  <p><strong>Privacy policy</strong> — here you can read the privacy policy.</p>
+  <p><strong>Feedback.</strong> It matters a lot to us that the app is convenient to
+    use. Tell us what you liked, what is missing, or what doesn't work as it
+    should. We'd be glad to make the app better!</p>
+  <p>This section has links to the app in the stores you installed it from — you can
+    go there and leave a review. We'd be very happy if our app helps you.</p>
+  <p>There is also a detailed guide on how to report a problem or request a new
+    feature. Once you've read it, follow the link to put together a detailed
+    report.</p>
+  <p><strong>About the app</strong> — here you can see the current version of the
+    app and a link to its developer.</p>
+
+  <hr>
+  <p class="meta">My Pets — a pet care diary.</p>
+</body>
+</html>

@@ -10,6 +10,9 @@ user's device — the app has no server of its own.
 
 - **Privacy Policy** (published via GitHub Pages):
   - [English version](https://internetova.github.io/my-pets-app/privacy-policy-en.html)
+- **How to use the app — My Pets** — guide for users
+  (публикуется через GitHub Pages):
+  - [English version](https://internetova.github.io/my-pets-app/app-guide-en.html)
 - **How to report a bug** — a step-by-step guide for users
   (published via GitHub Pages):
   - [English version](https://internetova.github.io/my-pets-app/how-to-report-en.html)
@@ -30,6 +33,9 @@ user's device — the app has no server of its own.
 
 - **Политика конфиденциальности** (публикуется через GitHub Pages):
   - [Русская версия](https://internetova.github.io/my-pets-app/privacy-policy-ru.html)
+- **Как пользоваться приложением — My Pets** — инструкция для пользователей
+  (публикуется через GitHub Pages):
+  - [Русская версия](https://internetova.github.io/my-pets-app/app-guide-ru.html)
 - **Как сообщить об ошибке** — пошаговая инструкция для пользователей
   (публикуется через GitHub Pages):
   - [Русская версия](https://internetova.github.io/my-pets-app/how-to-report-ru.html)
