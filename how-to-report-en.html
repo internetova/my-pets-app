@@ -12,6 +12,24 @@
       --muted: #5f5b66;
       --accent: #6750a4;
       --divider: #e7e0ec;
+
+      /* The page opens in a WebView beneath the app's app bar (56px high) and
+         the status bar. Top offset = safe-area (status bar/notch) + app bar
+         height + a visual gap, so content does not slide under the app bar.
+         Fallback 24px for platforms that do not report safe-area-inset.
+         One value for both the body padding and the anchor scroll stop, so
+         the two can't drift apart. */
+      --app-top-offset: calc(env(safe-area-inset-top, 24px) + 56px + 24px);
+
+      /* Jumping to an anchor scrolls the target to the top of the viewport,
+         and in the WebView that top sits under the app bar — body padding
+         doesn't help, it only applies at scroll position 0. scroll-padding-top
+         lowers the stop point so the section heading stays visible. */
+      scroll-padding-top: var(--app-top-offset);
+      scroll-behavior: smooth;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root { scroll-behavior: auto; }
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -45,11 +63,8 @@
     * { box-sizing: border-box; }
     body {
       margin: 0 auto;
-      /* The page opens in a WebView beneath the app's app bar (56px high) and
-         the status bar. Top padding = safe-area (status bar/notch) + app bar
-         height + a visual gap, so content does not slide under the app bar.
-         Fallback 24px for platforms that do not report safe-area-inset. */
-      padding: calc(env(safe-area-inset-top, 24px) + 56px + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
+      /* Top padding — see --app-top-offset in :root. */
+      padding: var(--app-top-offset) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
       max-width: 700px;
       background: var(--bg);
       color: var(--text);

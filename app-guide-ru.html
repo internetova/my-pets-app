@@ -12,6 +12,24 @@
       --muted: #5f5b66;
       --accent: #6750a4;
       --divider: #e7e0ec;
+
+      /* Страница открывается в WebView под аппбаром приложения (высота 56px)
+         и статусбаром. Верхний отступ = safe-area (статусбар/вырез) + высота
+         аппбара + визуальный зазор, чтобы контент не уезжал под аппбар.
+         Фолбэк 24px для платформ, где safe-area-inset не приходит.
+         Одно значение и для паддинга body, и для остановки прокрутки на
+         якоре, чтобы они не разъезжались. */
+      --app-top-offset: calc(env(safe-area-inset-top, 24px) + 56px + 24px);
+
+      /* Переход по якорю прокручивает цель к верху вьюпорта, а верх вьюпорта
+         в WebView находится под аппбаром — паддинг body тут не помогает, он
+         работает только в позиции скролла 0. scroll-padding-top опускает
+         точку остановки, чтобы заголовок раздела остался видимым. */
+      scroll-padding-top: var(--app-top-offset);
+      scroll-behavior: smooth;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root { scroll-behavior: auto; }
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -45,11 +63,8 @@
     * { box-sizing: border-box; }
     body {
       margin: 0 auto;
-      /* Страница открывается в WebView под аппбаром приложения (высота 56px)
-         и статусбаром. Верхний отступ = safe-area (статусбар/вырез) + высота
-         аппбара + визуальный зазор, чтобы контент не уезжал под аппбар.
-         Фолбэк 24px для платформ, где safe-area-inset не приходит. */
-      padding: calc(env(safe-area-inset-top, 24px) + 56px + 24px) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
+      /* Верхний отступ — --app-top-offset, см. :root. */
+      padding: var(--app-top-offset) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
       max-width: 700px;
       background: var(--bg);
       color: var(--text);
