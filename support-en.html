@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Support — My Pets</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+
+      /* The page opens in the app's WebView below the app bar (56px tall) and
+         the status bar. Top padding = safe area (status bar / notch) + app bar
+         height + a visual gap, so the content doesn't slide under the app bar.
+         The 24px fallback is for platforms that don't report safe-area-inset.
+         One value for both the body padding and the anchor scroll stop, so the
+         two can't drift apart. */
+      --app-top-offset: calc(env(safe-area-inset-top, 24px) + 56px + 24px);
+
+      /* Following an anchor scrolls the target to the top of the viewport, and
+         in the WebView the top of the viewport sits under the app bar — body
+         padding doesn't help there, it only works at scroll position 0.
+         scroll-padding-top lowers the stop point so the section heading stays
+         visible. */
+      scroll-padding-top: var(--app-top-offset);
+      scroll-behavior: smooth;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root { scroll-behavior: auto; }
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141218;
+        --text: #e6e0e9;
+        --muted: #cac4d0;
+        --accent: #d0bcff;
+        --divider: #36343b;
+      }
+    }
+    /* Explicit theme from the app: the page is opened with a ?theme=dark|light
+       parameter, and the script below sets data-theme on <html>. Attribute
+       selectors are more specific than :root, so they beat the system media
+       query. Without the parameter — the system theme. */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141218;
+      --text: #e6e0e9;
+      --muted: #cac4d0;
+      --accent: #d0bcff;
+      --divider: #36343b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      /* Top padding — --app-top-offset, see :root. */
+      padding: var(--app-top-offset) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
+      max-width: 700px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.6em; line-height: 1.3; margin: 0 0 4px; }
+    h2 { font-size: 1.2em; margin: 32px 0 8px; }
+    p, li { margin: 8px 0; }
+    ul { padding-left: 22px; }
+    a { color: var(--accent); }
+    .meta { color: var(--muted); font-size: 0.9em; margin-bottom: 24px; }
+    hr { border: none; border-top: 1px solid var(--divider); margin: 24px 0; }
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: 4px 0 4px 14px;
+      margin: 16px 0;
+      color: var(--muted);
+    }
+    /* Header: app icon, name, tagline. Centred with text-align, no flexbox —
+       the block behaves the same at 700px and at 320px. */
+    .app-head { text-align: center; }
+    .app-icon {
+      display: block;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 12px;
+      /* The source file is a plain square (it's meant for the launcher mask).
+         We round it here: 22px of 96px ≈ 23%, roughly how app stores and the
+         system itself display icons. */
+      border-radius: 22px;
+    }
+    /* Store links. flex-wrap moves them onto a second line on narrow screens —
+       no media query needed. */
+    .stores {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 20px;
+      margin: 0 0 28px;
+    }
+    /* Action button: one class for both the email link and the <button>.
+       Outlined rather than filled: --accent is light in the dark theme
+       (#d0bcff), and a filled variant would need its own text-colour variable. */
+    .btn {
+      display: inline-block;
+      margin: 4px 8px 4px 0;
+      padding: 12px 18px;
+      border: 1px solid var(--accent);
+      border-radius: 22px;
+      background: transparent;
+      color: var(--accent);
+      font: inherit;         /* <button> doesn't inherit the page font */
+      line-height: 1.2;      /* ~45px tall — the minimum comfortable tap target */
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      overflow-wrap: anywhere;  /* a long address can't overflow a narrow screen */
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .btn:active { opacity: 0.7; }
+    /* .btn overrides the browser's display:none, so the hidden attribute has to
+       be restored explicitly: the email buttons stay hidden until the script
+       runs. */
+    [hidden] { display: none !important; }
+  </style>
+  <script>
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.dataset.theme = theme;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="app-head">
+    <img class="app-icon" src="images/app/app-icon-256.png" width="96" height="96"
+         alt="The My Pets app icon">
+    <h1>My Pets app support</h1>
+    <p class="meta">A pet care diary</p>
+    <p class="stores">
+      <a href="https://apps.apple.com/app/id6816668584">App Store</a>
+      <a href="https://play.google.com/store/apps/details?id=ru.sugina.mypets">Google Play</a>
+      <a href="https://www.rustore.ru/catalog/app/ru.sugina.mypets">RuStore</a>
+    </p>
+  </div>
+
+  <p>My Pets is made by one person — Tatiana Sugina. Every message is read by
+    the developer herself, and every message gets an answer. Get in touch if
+    something isn't working, something isn't clear, or you'd like to see
+    something new in the app.</p>
+
+  <p>My Pets is a free app with no ads and no in-app purchases. There is no
+    sign-up and no account, and all your records are stored only on your phone:
+    the app has no server of its own.</p>
+
+  <h2>Where to get in touch</h2>
+  <p>There are two ways — pick the one that fits your case.</p>
+  <ul>
+    <li><strong>A personal question</strong> — something happened to your
+      records, data went missing, you can't move it to another phone, you have a
+      question about privacy, or you simply would rather not write about it in
+      public. <a href="#email">Email the developer</a>.</li>
+    <li><strong>A bug, a wrong translation or an idea</strong> — something in
+      the app works incorrectly, there's a typo in the text, or you're missing a
+      feature. <a href="#github">Tell us about it on GitHub</a>: those reports
+      are visible to other users too, and you can come back to see what happened
+      to them.</li>
+  </ul>
+  <p>Not sure where to write? Send an email — we'll figure it out together.</p>
+
+  <h2 id="email">A personal question — send an email</h2>
+  <p>So that the very first reply is useful, please tell us in your email:</p>
+  <ul>
+    <li><strong>what happened</strong> — in plain words, no technical details
+      needed;</li>
+    <li><strong>what you were doing before that</strong> — which screens you
+      opened, what you tapped;</li>
+    <li><strong>your phone model</strong> and system — Android or iPhone;</li>
+    <li><strong>the app version</strong> — you can find it under
+      <strong>Settings → About the App</strong>.</li>
+  </ul>
+  <p>Feel free to attach a screenshot — it often explains the problem better
+    than any description.</p>
+
+  <p>
+    <a class="btn" id="mail-link" hidden>Send an email</a>
+    <button class="btn" id="mail-copy" type="button" hidden>Copy the address</button>
+  </p>
+  <p class="meta" id="mail-copied" hidden>The address has been copied to the clipboard.</p>
+  <noscript>
+    <p>The developer's address: <strong>sugina.dev [at] gmail [dot] com</strong>
+      — put it together into one line without spaces.</p>
+  </noscript>
+
+  <div class="note">
+    <p>⚠️ Please don't send passwords, banking details or other people's
+      personal data — none of that is needed to help you with the app. My Pets
+      has no accounts and no sign-in, so the developer will never ask you for a
+      login, a password or a code from a message.</p>
+  </div>
+
+  <h2 id="github">A bug, a translation or an idea — tell us on GitHub</h2>
+  <p>Bug reports and suggestions are collected on the <strong>Issues</strong>
+    page on GitHub — an open list where anyone can report a problem or suggest
+    an improvement.</p>
+  <ul>
+    <li><a href="https://github.com/internetova/my-pets-app/issues">The app's
+      issues page</a> — see what's already being discussed, or create your own
+      report.</li>
+    <li><a href="how-to-report-en.html">How to report a bug</a> — a
+      step-by-step guide with screenshots, if you're doing this for the first
+      time.</li>
+  </ul>
+
+  <div class="note">
+    <p>ℹ️ To send a report you need a free
+      <a href="https://github.com/">GitHub</a> account. First look through the
+      list of open issues — someone may have already reported your problem, and
+      then it's enough to add your own comment.</p>
+  </div>
+
+  <div class="note">
+    <p>⚠️ Do not include personal data in your report (your name, phone number,
+      email, home address, etc.). The page is public and visible to everyone. If
+      the problem can't be described without revealing personal data, send an
+      email instead.</p>
+  </div>
+
+  <h2>When to expect a reply</h2>
+  <p>The developer usually replies within <strong>2–3 business days</strong>.</p>
+  <p>If it takes longer, please check your Spam folder — the reply may have
+    ended up there. If it's not there either, write again: emails do get lost
+    along the way sometimes.</p>
+  <p>Replies to GitHub reports appear in the report itself, and a notification
+    is sent to the email address of your GitHub account.</p>
+
+  <h2>Frequently asked questions</h2>
+
+  <p><strong>Where can I find the app version?</strong></p>
+  <p>Open <strong>Settings → About the App</strong> — the number is shown in the
+    "App version" row. It's worth including it in any message you send.</p>
+
+  <p><strong>I deleted the app (or lost my phone). Can my records be restored?</strong></p>
+  <p>Unfortunately, no. All data is stored only on your device — the app has no
+    server, and the developer has no copy of your records. They can only be
+    restored from an archive you created yourself using Data Export. So do make
+    an archive from time to time: <strong>Settings → Database and Files → Data
+    Export</strong>. There's more about this in the
+    <a href="app-guide-en.html#tab-settings">user guide</a>.</p>
+
+  <p><strong>How do I move my data to another phone?</strong></p>
+  <p>On the old phone, run Data Export, transfer the resulting archive to the
+    new phone in whatever way is convenient, and run Data Import there. Both
+    phones need to have the same version of the app installed. The steps are
+    described in the <a href="app-guide-en.html#tab-settings">user guide</a>.</p>
+
+  <h2>Further reading</h2>
+  <ul>
+    <li><a href="app-guide-en.html">How to use the app</a> — a detailed guide
+      to every screen.</li>
+    <li><a href="how-to-report-en.html">How to report a bug</a> — a
+      step-by-step guide with screenshots.</li>
+    <li><a href="privacy-policy-en.html">Privacy Policy</a> — what data the app
+      collects and how it is used.</li>
+  </ul>
+
+  <hr>
+  <p class="meta">My Pets — a pet care diary.</p>
+
+  <script>
+    /* The email address is never stored in the markup in one piece: no string
+       with "@" and no mailto:, so that spam bots reading the page source can't
+       harvest it. The script assembles the address from parts and puts it into
+       the link and the copy button. Without JavaScript the <noscript> block
+       above does the job. */
+    (function () {
+      var name = ['sugina', 'dev'].join('.');
+      var host = ['gmail', 'com'].join('.');
+      var address = name + String.fromCharCode(64) + host;
+
+      var link = document.getElementById('mail-link');
+      var copyButton = document.getElementById('mail-copy');
+      var copied = document.getElementById('mail-copied');
+      if (!link || !copyButton) return;
+
+      link.href = 'mail' + 'to:' + address;
+      link.textContent = address;
+      link.hidden = false;
+      copyButton.hidden = false;
+
+      var copiedTimer = null;
+      function showCopied() {
+        copied.hidden = false;
+        clearTimeout(copiedTimer);
+        copiedTimer = setTimeout(function () { copied.hidden = true; }, 3000);
+      }
+
+      /* navigator.clipboard is only available in a secure context (https or
+         localhost). That holds in the WebView and on the published page, but
+         the older execCommand path is kept just in case. */
+      function fallbackCopy() {
+        var field = document.createElement('textarea');
+        field.value = address;
+        field.setAttribute('readonly', '');
+        field.style.position = 'fixed';
+        field.style.opacity = '0';
+        document.body.appendChild(field);
+        field.select();
+        try { document.execCommand('copy'); } catch (e) { /* nothing to do */ }
+        document.body.removeChild(field);
+      }
+
+      copyButton.addEventListener('click', function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(address).then(showCopied, function () {
+            fallbackCopy();
+            showCopied();
+          });
+        } else {
+          fallbackCopy();
+          showCopied();
+        }
+      });
+    })();
+
+    /* Inside the app, links to neighbouring pages open in the same WebView but
+       without ?theme= — the forced theme would be lost and the page would fall
+       back to the system one. So we append the current parameter to every
+       internal link. We rewrite href up front rather than intercepting clicks,
+       so the theme survives "copy link" and long-press too. */
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme !== 'dark' && theme !== 'light') return;
+
+      var links = document.querySelectorAll('a[href]');
+      for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var href = link.getAttribute('href');
+        var url;
+        try { url = new URL(href, location.href); }
+        catch (e) { continue; }
+        /* We compare protocol and host separately rather than origin: for
+           mailto: the origin is "null", so such links are filtered out right
+           here, while file:// compares correctly and the page can be checked
+           without a server. */
+        if (url.protocol !== location.protocol || url.host !== location.host) continue;
+        if (url.pathname === location.pathname) continue;   // an anchor on this page
+        if (url.searchParams.has('theme')) continue;
+
+        /* We append the parameter to the original href string instead of
+           rebuilding the address from the parsed URL: the site lives in a
+           subdirectory (/my-pets-app/), and url.pathname would return a path
+           from the domain root, pointing the link at a page that doesn't
+           exist. */
+        var hashAt = href.indexOf('#');
+        var hash = hashAt === -1 ? '' : href.slice(hashAt);
+        var path = hashAt === -1 ? href : href.slice(0, hashAt);
+        var separator = path.indexOf('?') === -1 ? '?' : '&';
+        link.setAttribute('href', path + separator + 'theme=' + theme + hash);
+      }
+    })();
+  </script>
+</body>
+</html>

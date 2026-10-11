@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Поддержка — My Pets</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+
+      /* Страница открывается в WebView под аппбаром приложения (высота 56px)
+         и статусбаром. Верхний отступ = safe-area (статусбар/вырез) + высота
+         аппбара + визуальный зазор, чтобы контент не уезжал под аппбар.
+         Фолбэк 24px для платформ, где safe-area-inset не приходит.
+         Одно значение и для паддинга body, и для остановки прокрутки на
+         якоре, чтобы они не разъезжались. */
+      --app-top-offset: calc(env(safe-area-inset-top, 24px) + 56px + 24px);
+
+      /* Переход по якорю прокручивает цель к верху вьюпорта, а верх вьюпорта
+         в WebView находится под аппбаром — паддинг body тут не помогает, он
+         работает только в позиции скролла 0. scroll-padding-top опускает
+         точку остановки, чтобы заголовок раздела остался видимым. */
+      scroll-padding-top: var(--app-top-offset);
+      scroll-behavior: smooth;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      :root { scroll-behavior: auto; }
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #141218;
+        --text: #e6e0e9;
+        --muted: #cac4d0;
+        --accent: #d0bcff;
+        --divider: #36343b;
+      }
+    }
+    /* Явная тема из приложения: страница открывается с параметром
+       ?theme=dark|light, скрипт ниже выставляет data-theme на <html>.
+       Селекторы с атрибутом специфичнее :root, поэтому побеждают
+       системную media query. Без параметра — системная тема. */
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #ffffff;
+      --text: #1d1b20;
+      --muted: #5f5b66;
+      --accent: #6750a4;
+      --divider: #e7e0ec;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #141218;
+      --text: #e6e0e9;
+      --muted: #cac4d0;
+      --accent: #d0bcff;
+      --divider: #36343b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0 auto;
+      /* Верхний отступ — --app-top-offset, см. :root. */
+      padding: var(--app-top-offset) 20px calc(env(safe-area-inset-bottom, 0px) + 48px);
+      max-width: 700px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    h1 { font-size: 1.6em; line-height: 1.3; margin: 0 0 4px; }
+    h2 { font-size: 1.2em; margin: 32px 0 8px; }
+    p, li { margin: 8px 0; }
+    ul { padding-left: 22px; }
+    a { color: var(--accent); }
+    .meta { color: var(--muted); font-size: 0.9em; margin-bottom: 24px; }
+    hr { border: none; border-top: 1px solid var(--divider); margin: 24px 0; }
+    .note {
+      border-left: 3px solid var(--accent);
+      padding: 4px 0 4px 14px;
+      margin: 16px 0;
+      color: var(--muted);
+    }
+    /* Шапка: иконка приложения, название, подзаголовок. Центрируется текстом,
+       без флексов — блок одинаково ведёт себя и на 700px, и на 320px. */
+    .app-head { text-align: center; }
+    .app-icon {
+      display: block;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 12px;
+      /* Исходник — квадрат без скруглений (под маску лаунчера). Скругляем
+         здесь: 22px от 96px ≈ 23%, примерно как иконки показывают магазины
+         приложений и сама система. */
+      border-radius: 22px;
+    }
+    /* Ссылки на магазины. flex-wrap переносит их на вторую строку на узких
+       экранах — медиазапрос не нужен. */
+    .stores {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px 20px;
+      margin: 0 0 28px;
+    }
+    /* Кнопка действия: один класс и для ссылки с адресом почты, и для <button>.
+       Контурная, а не заливная: --accent в тёмной теме светлый (#d0bcff),
+       заливка потребовала бы отдельной переменной для цвета текста. */
+    .btn {
+      display: inline-block;
+      margin: 4px 8px 4px 0;
+      padding: 12px 18px;
+      border: 1px solid var(--accent);
+      border-radius: 22px;
+      background: transparent;
+      color: var(--accent);
+      font: inherit;         /* <button> не наследует шрифт страницы */
+      line-height: 1.2;      /* высота ~45px — минимальная цель для пальца */
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      overflow-wrap: anywhere;  /* длинный адрес не вылезает на узком экране */
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .btn:active { opacity: 0.7; }
+    /* .btn переопределяет display:none из стилей браузера, поэтому атрибут
+       hidden возвращаем явно: до работы скрипта кнопки с почтой скрыты. */
+    [hidden] { display: none !important; }
+  </style>
+  <script>
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme === 'dark' || theme === 'light') {
+        document.documentElement.dataset.theme = theme;
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="app-head">
+    <img class="app-icon" src="images/app/app-icon-256.png" width="96" height="96"
+         alt="Иконка приложения «Мои питомцы»">
+    <h1>Поддержка приложения «Мои питомцы»</h1>
+    <p class="meta">Дневник заботы о питомцах</p>
+    <p class="stores">
+      <a href="https://apps.apple.com/app/id6816668584">App Store</a>
+      <a href="https://play.google.com/store/apps/details?id=ru.sugina.mypets">Google Play</a>
+      <a href="https://www.rustore.ru/catalog/app/ru.sugina.mypets">RuStore</a>
+    </p>
+  </div>
+
+  <p>Приложение делает один человек — Татьяна Сугина. Каждое обращение читает
+    сам разработчик, и на каждое приходит ответ. Напишите, если что-то не
+    работает, что-то непонятно или вам хочется, чтобы в приложении появилось
+    что-то новое.</p>
+
+  <p>«Мои питомцы» — бесплатное приложение без рекламы и встроенных покупок.
+    Регистрация и аккаунт не нужны, а все записи хранятся только на вашем
+    телефоне: у приложения нет собственного сервера.</p>
+
+  <h2>Куда обратиться</h2>
+  <p>Есть два способа — выберите тот, который подходит вашему случаю.</p>
+  <ul>
+    <li><strong>Личный вопрос</strong> — что-то случилось с вашими записями,
+      пропали данные, не получается перенести их на другой телефон, есть вопрос
+      о приватности или просто не хочется писать об этом публично.
+      <a href="#email">Напишите на почту разработчику</a>.</li>
+    <li><strong>Ошибка, неточный перевод или идея</strong> — что-то в приложении
+      работает неправильно, в тексте опечатка или вам не хватает какой-то
+      возможности. <a href="#github">Расскажите об этом на GitHub</a>: такие
+      обращения видят и другие пользователи, к ним можно вернуться и посмотреть,
+      что с ними стало.</li>
+  </ul>
+  <p>Не уверены, куда писать? Пишите на почту — разберёмся вместе.</p>
+
+  <h2 id="email">Личный вопрос — напишите на почту</h2>
+  <p>Чтобы первый же ответ оказался полезным, расскажите в письме:</p>
+  <ul>
+    <li><strong>что произошло</strong> — простыми словами, без технических
+      подробностей;</li>
+    <li><strong>что вы делали до этого</strong> — какие экраны открывали, на что
+      нажимали;</li>
+    <li><strong>модель телефона</strong> и систему — Android или iPhone;</li>
+    <li><strong>версию приложения</strong> — её видно в разделе
+      <strong>«Настройки» → «О приложении»</strong>.</li>
+  </ul>
+  <p>Можно приложить к письму скриншот — часто это объясняет проблему лучше
+    любого описания.</p>
+
+  <p>
+    <a class="btn" id="mail-link" hidden>Написать на почту</a>
+    <button class="btn" id="mail-copy" type="button" hidden>Скопировать адрес</button>
+  </p>
+  <p class="meta" id="mail-copied" hidden>Адрес скопирован в буфер обмена.</p>
+  <noscript>
+    <p>Адрес разработчика: <strong>sugina.dev [собака] gmail [точка] com</strong>
+      — соберите его в одну строку без пробелов.</p>
+  </noscript>
+
+  <div class="note">
+    <p>⚠️ Не присылайте пароли, банковские данные и персональные данные других
+      людей — для помощи с приложением они не нужны. В «Моих питомцах» нет
+      аккаунтов и входа, поэтому разработчик никогда не попросит у вас логин,
+      пароль или код из сообщения.</p>
+  </div>
+
+  <h2 id="github">Ошибка, перевод или идея — расскажите на GitHub</h2>
+  <p>Обращения об ошибках и предложения собираются на странице
+    <strong>Issues</strong> («обращения») в GitHub — это открытый список, где
+    каждый может рассказать о проблеме или предложить улучшение.</p>
+  <ul>
+    <li><a href="https://github.com/internetova/my-pets-app/issues">Список
+      обращений приложения</a> — посмотреть, что уже обсуждают, или создать
+      своё обращение.</li>
+    <li><a href="how-to-report-ru.html">Как сообщить об ошибке</a> — пошаговая
+      инструкция со скриншотами, если вы делаете это впервые.</li>
+  </ul>
+
+  <div class="note">
+    <p>ℹ️ Чтобы отправить обращение, нужен бесплатный аккаунт
+      <a href="https://github.com/">GitHub</a>. Сначала посмотрите список уже
+      открытых обращений — возможно, о вашей проблеме кто-то уже написал; тогда
+      достаточно добавить свой комментарий.</p>
+  </div>
+
+  <div class="note">
+    <p>⚠️ Не указывайте в обращении личные данные (имя, номер телефона,
+      электронную почту, домашний адрес и т. п.). Страница открытая и видна
+      всем. Если о проблеме нельзя рассказать, не раскрывая личных данных, —
+      напишите на почту.</p>
+  </div>
+
+  <h2>Когда ждать ответа</h2>
+  <p>Обычно разработчик отвечает в течение <strong>2–3 рабочих дней</strong>.</p>
+  <p>Если ответа нет дольше — загляните в папку «Спам»: письмо могло попасть
+    туда. Не нашли — напишите ещё раз, бывает, что письма теряются по дороге.</p>
+  <p>На обращения в GitHub ответ приходит прямо в самом обращении, уведомление
+    о нём придёт на почту вашего аккаунта GitHub.</p>
+
+  <h2>Частые вопросы</h2>
+
+  <p><strong>Где посмотреть версию приложения?</strong></p>
+  <p>Откройте <strong>«Настройки» → «О приложении»</strong> — номер версии
+    указан в строке «Версия приложения». Его стоит приложить к любому обращению.</p>
+
+  <p><strong>Я удалил приложение (или потерял телефон). Можно вернуть записи?</strong></p>
+  <p>К сожалению, нет. Все данные хранятся только на вашем устройстве — у
+    приложения нет сервера, и у разработчика нет копии ваших записей. Вернуть
+    данные можно только из архива, который вы сделали сами через экспорт.
+    Поэтому время от времени делайте архив: <strong>«Настройки» → «База данных и
+    файлы» → «Экспорт данных»</strong>. Подробнее — в
+    <a href="app-guide-ru.html#tab-settings">руководстве</a>.</p>
+
+  <p><strong>Как перенести данные на другой телефон?</strong></p>
+  <p>На старом телефоне сделайте экспорт данных, перенесите полученный архив на
+    новый телефон любым удобным способом и выполните там импорт. Важно, чтобы на
+    обоих телефонах была установлена одна и та же версия приложения. Пошагово
+    это описано в <a href="app-guide-ru.html#tab-settings">руководстве</a>.</p>
+
+  <h2>Что ещё почитать</h2>
+  <ul>
+    <li><a href="app-guide-ru.html">Как пользоваться приложением</a> —
+      подробное руководство по всем экранам.</li>
+    <li><a href="how-to-report-ru.html">Как сообщить об ошибке</a> — пошаговая
+      инструкция со скриншотами.</li>
+    <li><a href="privacy-policy-ru.html">Политика конфиденциальности</a> —
+      какие данные собирает приложение и как они используются.</li>
+  </ul>
+
+  <hr>
+  <p class="meta">«Мои питомцы» — дневник заботы о питомцах.</p>
+
+  <script>
+    /* Адрес почты не хранится в разметке целиком: ни строки с «@», ни mailto:,
+       чтобы его не собрали спам-роботы, которые читают исходник страницы.
+       Скрипт складывает адрес из кусочков и проставляет его в ссылку и в
+       кнопку копирования. Без JavaScript работает блок <noscript> выше. */
+    (function () {
+      var name = ['sugina', 'dev'].join('.');
+      var host = ['gmail', 'com'].join('.');
+      var address = name + String.fromCharCode(64) + host;
+
+      var link = document.getElementById('mail-link');
+      var copyButton = document.getElementById('mail-copy');
+      var copied = document.getElementById('mail-copied');
+      if (!link || !copyButton) return;
+
+      link.href = 'mail' + 'to:' + address;
+      link.textContent = address;
+      link.hidden = false;
+      copyButton.hidden = false;
+
+      var copiedTimer = null;
+      function showCopied() {
+        copied.hidden = false;
+        clearTimeout(copiedTimer);
+        copiedTimer = setTimeout(function () { copied.hidden = true; }, 3000);
+      }
+
+      /* navigator.clipboard доступен только в защищённом контексте (https или
+         localhost). В WebView и на обычных страницах это выполняется, но на
+         всякий случай оставлен старый способ через execCommand. */
+      function fallbackCopy() {
+        var field = document.createElement('textarea');
+        field.value = address;
+        field.setAttribute('readonly', '');
+        field.style.position = 'fixed';
+        field.style.opacity = '0';
+        document.body.appendChild(field);
+        field.select();
+        try { document.execCommand('copy'); } catch (e) { /* ничего не делаем */ }
+        document.body.removeChild(field);
+      }
+
+      copyButton.addEventListener('click', function () {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(address).then(showCopied, function () {
+            fallbackCopy();
+            showCopied();
+          });
+        } else {
+          fallbackCopy();
+          showCopied();
+        }
+      });
+    })();
+
+    /* Внутри приложения ссылки на соседние страницы открываются в том же
+       WebView, но уже без ?theme= — принудительная тема потерялась бы, и
+       страница открылась бы в системной. Дописываем текущий параметр во все
+       внутренние ссылки. Переписываем href заранее, а не перехватываем клик,
+       чтобы тема сохранялась и при «копировать ссылку» или долгом нажатии. */
+    (function () {
+      var theme = new URLSearchParams(location.search).get('theme');
+      if (theme !== 'dark' && theme !== 'light') return;
+
+      var links = document.querySelectorAll('a[href]');
+      for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var href = link.getAttribute('href');
+        var url;
+        try { url = new URL(href, location.href); }
+        catch (e) { continue; }
+        /* Сравниваем protocol и host по отдельности, а не origin: у mailto:
+           origin равен "null", такая ссылка отсеивается здесь же, а file://
+           сравнивается корректно, и страницу можно проверить без сервера. */
+        if (url.protocol !== location.protocol || url.host !== location.host) continue;
+        if (url.pathname === location.pathname) continue;   // якорь на этой же странице
+        if (url.searchParams.has('theme')) continue;
+
+        /* Параметр дописываем к исходной строке href, а не собираем адрес из
+           разобранного URL: сайт лежит в подкаталоге (/my-pets-app/), и
+           url.pathname вернул бы путь от корня домена — ссылка увела бы на
+           несуществующую страницу. */
+        var hashAt = href.indexOf('#');
+        var hash = hashAt === -1 ? '' : href.slice(hashAt);
+        var path = hashAt === -1 ? href : href.slice(0, hashAt);
+        var separator = path.indexOf('?') === -1 ? '?' : '&';
+        link.setAttribute('href', path + separator + 'theme=' + theme + hash);
+      }
+    })();
+  </script>
+</body>
+</html>

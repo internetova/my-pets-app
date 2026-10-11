@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: 💬 Support (English)
+    url: https://internetova.github.io/my-pets-app/support-en.html
+    about: A personal question — email the developer. A bug, a translation or an idea — here, in Issues.
+  - name: 💬 Поддержка пользователей (русский)
+    url: https://internetova.github.io/my-pets-app/support-ru.html
+    about: Личный вопрос — на почту разработчику. Ошибка, перевод или идея — сюда, в Issues.
   - name: 🔒 Privacy Policy (English)
     url: https://internetova.github.io/my-pets-app/privacy-policy-en.html
     about: How the app handles your data.

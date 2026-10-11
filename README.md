@@ -8,6 +8,8 @@ user's device — the app has no server of its own.
 
 ## What's in this repository
 
+- **Support** (published via GitHub Pages):
+  - [English version](https://internetova.github.io/my-pets-app/support-en.html)
 - **Privacy Policy** (published via GitHub Pages):
   - [English version](https://internetova.github.io/my-pets-app/privacy-policy-en.html)
 - **How to use the app — My Pets** — guide for users
@@ -31,6 +33,8 @@ user's device — the app has no server of its own.
 
 ## Что находится в этом репозитории
 
+- **Поддержка пользователей** (публикуется через GitHub Pages):
+  - [Русская версия](https://internetova.github.io/my-pets-app/support-ru.html)
 - **Политика конфиденциальности** (публикуется через GitHub Pages):
   - [Русская версия](https://internetova.github.io/my-pets-app/privacy-policy-ru.html)
 - **Как пользоваться приложением — My Pets** — инструкция для пользователей
