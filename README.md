@@ -8,6 +8,8 @@ user's device — the app has no server of its own.
 
 ## What's in this repository
 
+- **Support** (published via GitHub Pages):
+  - [English version](https://internetova.github.io/my-pets-app/support-en.html)
 - **Privacy Policy** (published via GitHub Pages):
   - [English version](https://internetova.github.io/my-pets-app/privacy-policy-en.html)
 - **How to use the app — My Pets** — guide for users
